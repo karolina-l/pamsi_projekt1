@@ -17,7 +17,7 @@ public:
     ~PrQueue();
     bool empty();
     std::string front();
-    void push(int new_id, std::string& mess_text);
+    void push(int new_id, const std::string& mess_text);
     void pop();
 
 };
@@ -35,31 +35,36 @@ bool PrQueue::empty() {
     return !head;
 }
 
-//zwraca ierwszy element kolejki bez zdejmowania go
+//zwraca pierwszy element kolejki bez zdejmowania go
 //gdy kolejka jest pusta wyrzuca wyjatek std::length_error
 std::string PrQueue::front() {
     if(head) return head->data;
     else throw std::length_error("Kolejka jest pusta");
 }
-void PrQueue::push(int new_id, std::string &mess_text) { //priorytet 1 jest wazniejszy niz priorytet 2 etc.
+void PrQueue::push(int new_id, const std::string &mess_text) { //priorytet 1 jest wazniejszy niz priorytet 2 etc.
     Package* temp;
     Package* iter;
     temp = new Package;
-    temp->ID=new_id;
-    temp->data=mess_text;
-    temp->nextPack= nullptr;
-    if(head) head=temp=tail;               //czy kolejka jest pusta?
-    else if((head->ID) >= temp->ID){       //czy  ID pierwszego elementu jest wieksze niz id nowego?
-        temp->nextPack = head;
+    temp->ID = new_id;
+    temp->data = mess_text;
+    temp->nextPack = nullptr;
+    if(!head) {                             //czy kolejka jest pusta?
         head = temp;
     }
-    else{                               //jesli nic poprzedniego, to szukaj miejsca, w ktorym ID nastepnego jest wieksze niz wstawianego
-        iter = head;
-        while(((iter->nextPack->ID) < temp->ID) && (iter->nextPack)) iter = iter->nextPack;
-        temp->nextPack = iter->nextPack;   //wstaw nowy przed element z wiekszym ID
-        iter->nextPack =temp;             //ustaw wskaznik elementu przed na nowy element
+    else if((head->ID) >= temp->ID){        //czy  ID pierwszego elementu jest wieksze niz id nowego?
+        temp->nextPack = head;
+        head = temp;
+
     }
-    if((temp->nextPack) == nullptr) tail = temp;  //jesli dodany element wskazuje na null, to staje sie nowym tailem
+    else {                                   //jesli nic poprzedniego, to szukaj miejsca, w ktorym ID nastepnego jest wieksze niz wstawianego
+        iter = head;
+        while ((iter->nextPack) && ((iter->nextPack->ID) < temp->ID))   iter = iter->nextPack;
+        temp->nextPack = iter->nextPack;    //wstaw nowy przed element z wiekszym ID
+        iter->nextPack = temp;               //ustaw wskaznik elementu przed na nowy element
+
+        if ((temp->nextPack) == nullptr)
+            tail = temp;  //jesli dodany element wskazuje na null, to staje sie nowym tailem
+    }
 }
 
 
@@ -70,6 +75,8 @@ void PrQueue::pop() {
         if(!head) tail= nullptr;    //czy lista jest pusta? tak -> ustaw tail na null
         delete temp;                //usuniecie elementu z pamieci
     }
+    else std::cout<<"Nie mozna wykonac operacji - kolejka pusta.";
 }
 
 #endif //KLECKA_PR1_PRIORITY_QUEUE_H
+

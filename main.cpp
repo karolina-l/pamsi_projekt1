@@ -28,19 +28,23 @@ int main()
     PrQueue queue;
 
     for(int i = 0; i < packnum; i++){                      //do i mniejszego od ilosci paczek
-        Package pack;
-        pack.ID = i;
+        std::string temp;
         for(int j = 0; j < packlen; j++){                   //do j mniejszego od dlugosci paczki
             if(counter <= message.length()) {               //jesli counter jest mniejszy od dlugosci wiadomosci
-                pack.data += message[counter];              //zapisz do daty znak wiadomosci
+                temp += message[counter];              //zapisz do daty znak wiadomosci
                 counter++;
             }
-            else pack.data += '\0';                         //jesli nie, wstaw znak konca tekstu
+            else temp += '\0';                         //jesli nie, wstaw znak konca tekstu
         }
-        //pack.showPack();
+        queue.push(i, temp);
     }
     counter = 0;
-
+    std::string test;
+    for(int i = 0; i < packnum; i++){
+        test = queue.front();
+        std::cout<<test<<std::endl;
+        queue.pop();
+    }
 
 
     return 0;
