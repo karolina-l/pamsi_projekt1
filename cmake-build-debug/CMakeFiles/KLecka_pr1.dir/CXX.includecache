@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Karolina/Desktop/Karolina/Studia/2 rok/PAMSI/KLecka_pr1/main.cpp
+iostream
+-
+string
+-
+cmath
+-
+priority_queue.h
+C:/Users/Karolina/Desktop/Karolina/Studia/2 rok/PAMSI/KLecka_pr1/priority_queue.h
+
+C:/Users/Karolina/Desktop/Karolina/Studia/2 rok/PAMSI/KLecka_pr1/package.h
+memory
+-
+
+C:/Users/Karolina/Desktop/Karolina/Studia/2 rok/PAMSI/KLecka_pr1/priority_queue.h
+package.h
+C:/Users/Karolina/Desktop/Karolina/Studia/2 rok/PAMSI/KLecka_pr1/package.h
+memory
+-
+
