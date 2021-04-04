@@ -13,6 +13,10 @@ string
 -
 cmath
 -
+cstdlib
+-
+time.h
+-
 priority_queue.h
 C:/Users/Karolina/Desktop/Karolina/Studia/2 rok/PAMSI/KLecka_pr1/priority_queue.h
 

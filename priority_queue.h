@@ -17,7 +17,8 @@ public:
     ~PrQueue();
     bool empty();
     std::string front();
-    void push(int new_id, const std::string& mess_text);
+    //void push(int new_id, const std::string& mess_text);
+    void push(Package& pack);
     void pop();
 
 };
@@ -38,10 +39,35 @@ bool PrQueue::empty() {
 //zwraca pierwszy element kolejki bez zdejmowania go
 //gdy kolejka jest pusta wyrzuca wyjatek std::length_error
 std::string PrQueue::front() {
-    if(head) return head->data;
+    if(head)  return head->data;
     else throw std::length_error("Kolejka jest pusta");
 }
-void PrQueue::push(int new_id, const std::string &mess_text) { //priorytet 1 jest wazniejszy niz priorytet 2 etc.
+
+void PrQueue::push(Package& pack) { //priorytet 1 jest wazniejszy niz priorytet 2 etc.
+    Package* iter;
+
+    pack.nextPack = nullptr;
+    if(!head) {                             //czy kolejka jest pusta?
+        head = &pack;
+    }
+    else if((head->ID) >= pack.ID){        //czy  ID pierwszego elementu jest wieksze niz id nowego?
+        pack.nextPack = head;
+        head = &pack;
+
+    }
+    else {                                   //jesli nic poprzedniego, to szukaj miejsca, w ktorym ID nastepnego jest wieksze niz wstawianego
+        iter = head;
+        while ((iter->nextPack) && ((iter->nextPack->ID) < pack.ID))   iter = iter->nextPack;
+        pack.nextPack = iter->nextPack;    //wstaw nowy przed element z wiekszym ID
+        iter->nextPack = &pack;               //ustaw wskaznik elementu przed na nowy element
+
+        if ((pack.nextPack) == nullptr)
+            tail = &pack;  //jesli dodany element wskazuje na null, to staje sie nowym tailem
+    }
+}
+
+
+/*void PrQueue::push(int new_id, const std::string &mess_text) { //priorytet 1 jest wazniejszy niz priorytet 2 etc.
     Package* temp;
     Package* iter;
     temp = new Package;
@@ -65,7 +91,7 @@ void PrQueue::push(int new_id, const std::string &mess_text) { //priorytet 1 jes
         if ((temp->nextPack) == nullptr)
             tail = temp;  //jesli dodany element wskazuje na null, to staje sie nowym tailem
     }
-}
+}*/
 
 
 void PrQueue::pop() {
@@ -73,7 +99,6 @@ void PrQueue::pop() {
         Package *temp = head;       //zapisanie heada do zmiennej dodatkowej
         head = head->nextPack;
         if(!head) tail= nullptr;    //czy lista jest pusta? tak -> ustaw tail na null
-        delete temp;                //usuniecie elementu z pamieci
     }
     else std::cout<<"Nie mozna wykonac operacji - kolejka pusta.";
 }
