@@ -47,7 +47,7 @@ void PrQueue::push(Package& pack) { //priorytet 1 jest wazniejszy niz priorytet 
     Package* iter;
 
     pack.nextPack = nullptr;
-    if(!head) {                             //czy kolejka jest pusta?
+    if(empty()) {                             //czy kolejka jest pusta?
         head = &pack;
     }
     else if((head->ID) >= pack.ID){        //czy  ID pierwszego elementu jest wieksze niz id nowego?
@@ -95,10 +95,9 @@ void PrQueue::push(Package& pack) { //priorytet 1 jest wazniejszy niz priorytet 
 
 
 void PrQueue::pop() {
-    if(head){
-        Package *temp = head;       //zapisanie heada do zmiennej dodatkowej
+    if(!empty()){
         head = head->nextPack;
-        if(!head) tail= nullptr;    //czy lista jest pusta? tak -> ustaw tail na null
+        if(empty()) tail= nullptr;    //czy lista jest pusta? tak -> ustaw tail na null
     }
     else std::cout<<"Nie mozna wykonac operacji - kolejka pusta.";
 }

@@ -118,7 +118,7 @@ int main()
     int packnum = num_of_packs(packlen, message.length());   //ilosc paczek
     PrQueue queue;
 
-    Package* pack = new Package[packnum];
+    auto* pack = new Package[packnum];
     for(int i = 0; i < packnum; i++){                      //do i mniejszego od ilosci paczek
         pack[i].ID = i;
         for(int j = 0; j < packlen; j++){                   //do j mniejszego od dlugosci paczki
@@ -126,11 +126,11 @@ int main()
                 pack[i].data += message[counter];              //zapisz do daty znak wiadomosci
                 counter++;
             }
-             else pack[i].data += '\0';                         //jesli nie, wstaw znak konca tekstu
+            else pack[i].data += '\0';                         //jesli nie, wstaw znak konca tekstu
         }
   }
 
-    srand(time(NULL));
+    srand(time(nullptr));
     int num_of_iter = rand() % packnum + message.length();
 
     for(int i = 0; i < num_of_iter; i++){
@@ -152,10 +152,15 @@ int main()
     }
 
 
-    std::cout<<"Odebrano wiadomosc!\n";
+    std::cout<<"Odebrano wiadomosc!\n\n";
     std::string mg;
     for(int i = 0; i < packnum; i++){
-        mg = queue.front();
+        try {
+            mg = queue.front();
+        }
+        catch (std::length_error &e) {
+            std::cout<<"Error: "<<e.what()<<"\n";
+        }
         std::cout<<mg;
         queue.pop();
     }

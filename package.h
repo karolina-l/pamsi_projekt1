@@ -11,14 +11,14 @@ struct Package{
     int ID;             //priorytet
     std::string data;   //tresc wiadomosci
     Package* nextPack;  //wskaznik na nastepny obiekt
-    void showPack();
+    void showPack() const;
     //Package() = default;
     //Package(int new_id, std::string text);
 
 
 };
 
-void Package::showPack() {
+void Package::showPack() const{
     std::cout<<data<<std::endl;
 }
 
