@@ -2,7 +2,8 @@
 #include <string>
 #include <cmath>
 #include <cstdlib>
-#include <time.h>
+#include <ctime>
+#include <fstream>
 #include "priority_queue.h"
 
 
@@ -20,12 +21,99 @@ int main()
     std::string message;
     int packlen=4;
 
-    std::cout << "Wpisz wiadomosc: ";
-    getline(std::cin, message);
-    std::cout<<message<<std::endl;
+    std::cout<<"Wyslij wiadomosc\n";
+    std::cout<<"-----MENU-----\n";
+    std::cout<<"w - wpisz wlasna wiadomosc\n";
+    std::cout<<"r - wczytaj wiadomosc z pliku\n";
+    std::cout<<"d - wyslij wiadomosc domyslna\n";
+    std::cout<<"q - wyjscie\n";
 
-    std::cout << "Podaj dlugosc paczki:" ;
-    std::cin>>packlen;
+    char choice;
+    std::cin >> choice;
+    while(choice != 'e') {
+        switch (choice) {
+            case 'w': {
+                std::cin.ignore( std::numeric_limits < std::streamsize >::max(), '\n' );
+                std::cout << "Wpisz wiadomosc: ";
+                getline(std::cin, message);
+                std::cout << message << std::endl;
+                choice = 'e';
+                break;
+            }
+            case 'r': {
+                std::ifstream file;
+                std::string path;
+                std::cin.ignore( std::numeric_limits < std::streamsize >::max(), '\n' );
+                std::cout << "Podaj sciezke do pliku. UWAGA! gdy uzywasz znaku \\, napisz go 2 razy: \nC:\\\\Users\\\\Karolina\\\\Desktop\\\\nazwa.txt: ";
+                getline(std::cin, path);
+                //std::cout << path << "\n";
+                file.open(path);
+                if (file.is_open()) {
+                    while (!file.eof()) getline(file, message);
+                    file.close();
+                    std::cout<<"Wczytano.\n";
+                    choice = 'e';
+                }
+                else {
+                    std::cout << "Otwieranie pliku nie powiodlo sie. Sprobuj jeszcze raz";
+                    choice = 'm';
+                }
+
+                break;
+            }
+            case 'd': {
+                message = "Litwo! Ojczyzno moja! ty jestes jak zdrowie Ile cie trzeba cenic, ten tylko sie dowie, Kto cie stracil. Dzis pieknosc twa w calej ozdobie widze i opisuje, bo tesknie po tobie.";
+                choice = 'e';
+                break;
+            }
+            case 'q': {
+                std::cout << "\nDo zobaczenia!\n";
+                exit(0);
+            }
+            case 'm': {
+                std::cout << "Wyslij wiadomosc\n";
+                std::cout << "-----MENU-----\n";
+                std::cout << "w - wpisz wlasna wiadomosc\n";
+                std::cout << "r - wczytaj wiadomosc z pliku\n";
+                std::cout << "d - wyslij wiadomosc domyslna\n";
+                std::cout << "q - wyjscie\n";
+                std::cin >> choice;
+                break;
+            }
+            default:
+                choice = 'm';
+
+        }
+    }
+
+    char answer;
+    std::cout<<"Czy chcesz zmienic ilosc znakow w paczce? Domyslna wartosc to: 4. Y/N  ";
+    std::cin>>answer;
+    while(answer != 'e') {
+        switch (answer) {
+            case 'Y': {
+                std::cout << "Podaj nowa ilosc znakow w paczce: \n";
+                std::cin >> packlen;
+                answer  = 'e';
+                break;
+            }
+            case 'N': {
+                answer = 'e';
+                break;
+            }
+
+            case 'o': {
+                std::cout << "Czy chcesz zmienic ilosc znakow w paczce? Domyslna wartosc to: 4. Y/N  ";
+                std::cin >> answer;
+                break;
+            }
+            default: {
+                std::cout << "Bledna wartosc. Sprobuj jeszcze raz.\n";
+                answer = 'o';
+            }
+        }
+    }
+
 
     int packnum = num_of_packs(packlen, message.length());   //ilosc paczek
     PrQueue queue;
@@ -40,57 +128,37 @@ int main()
             }
              else pack[i].data += '\0';                         //jesli nie, wstaw znak konca tekstu
         }
-        pack[i].showPack();
   }
 
     srand(time(NULL));
     int num_of_iter = rand() % packnum + message.length();
 
     for(int i = 0; i < num_of_iter; i++){
-        int index_1 = rand() % (packnum-1);
-        int index_2 = rand() % (packnum-1);
+        int index_1 = rand() % packnum;
+        int index_2 = rand() % packnum;
         std::swap(pack[index_1],pack[index_2]);
     }
-    std::cout<<"\n\n shuffle\n\n";
+    std::cout<<" Dowod, ze wiadomosci sa wysylane losowo\n";
     std::string t;
     int a;
     for(int i=0; i<packnum; i++){
         t=pack[i].data;
         a = pack[i].ID;
-        std::cout<<t<<" "<<a<<"\n";
+        std::cout<<t<<" ID:"<<a<<"\n";
     }
 
     for(int i = 0; i < packnum; i++){
         queue.push(pack[i]);
     }
 
-    std::string bla;
+
+    std::cout<<"Odebrano wiadomosc!\n";
+    std::string mg;
     for(int i = 0; i < packnum; i++){
-        bla = queue.front();
-        std::cout<<bla;
+        mg = queue.front();
+        std::cout<<mg;
         queue.pop();
     }
-
-
-    /*for(int i = 0; i < packnum; i++){                      //do i mniejszego od ilosci paczek
-        std::string temp;
-        for(int j = 0; j < packlen; j++){                   //do j mniejszego od dlugosci paczki
-            if(counter <= message.length()) {               //jesli counter jest mniejszy od dlugosci wiadomosci
-                temp += message[counter];              //zapisz do daty znak wiadomosci
-                counter++;
-            }
-            else temp += '\0';                         //jesli nie, wstaw znak konca tekstu
-        }
-        queue.push(i, temp);
-    }
-    counter = 0;
-
-    std::string test;
-    for(int i = 0; i < packnum; i++){
-        test = queue.front();
-        std::cout<<test<<std::endl;
-        queue.pop();
-    }*/
 
     return 0;
 }
