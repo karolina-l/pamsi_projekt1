@@ -157,13 +157,15 @@ int main()
     for(int i = 0; i < packnum; i++){
         try {
             mg = queue.front();
+            queue.pop();
         }
         catch (std::length_error &e) {
-            std::cout<<"Error: "<<e.what()<<"\n";
+            std::cout<<"\nError: "<<e.what()<<"\n";
         }
         std::cout<<mg;
-        queue.pop();
+
     }
 
+    delete [] pack;
     return 0;
 }

@@ -99,7 +99,7 @@ void PrQueue::pop() {
         head = head->nextPack;
         if(empty()) tail= nullptr;    //czy lista jest pusta? tak -> ustaw tail na null
     }
-    else std::cout<<"Nie mozna wykonac operacji - kolejka pusta.";
+    else throw std::length_error("Kolejka jest pusta. Usuwanie elementu nie powiodlo sie.");
 }
 
 #endif //KLECKA_PR1_PRIORITY_QUEUE_H
